@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Props/Green-zone-tileset/3 Objects/Other/Ladder1.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 11, 17 )
+
+[node name="Area2D" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 207, 202 )
+shape = SubResource( 1 )
+
+[node name="MiddleLadder" type="Sprite" parent="."]
+position = Vector2( 207.75, 202 )
+scale = Vector2( 1.152, 1.062 )
+texture = ExtResource( 1 )
