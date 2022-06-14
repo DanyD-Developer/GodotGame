@@ -62,7 +62,7 @@ public class PlayerScript : Godot.KinematicBody2D
 	public override void _Process(float _delta)
 	{
 		if(Health > 0){
-			//All Movement Character and Run 
+			//All Movement Character
 			CharacterMovement(_delta);
 			//Character Dash Method 
 			CharacterDash(_delta);
@@ -72,6 +72,8 @@ public class PlayerScript : Godot.KinematicBody2D
 			CharacterClimbing(_delta);
 			//Jump Method
 			CharacterJump(_delta);
+			//Run Method
+			CharacterRun(_delta);
 			//Gravity Defenitinion multiplying gravity by delta
 			if (!isClimbing)
 			{
@@ -85,7 +87,7 @@ public class PlayerScript : Godot.KinematicBody2D
 	{
 		facingDirecetion = 0;
 		//Verify if is Dashing
-		if (!isDashing && !isWallJumping)
+		if (!isDashing && !isWallJumping && !isRunning)
 		{
 			//if is taking damage he cant move 
 			if(!isTakingDamage){
@@ -107,15 +109,12 @@ public class PlayerScript : Godot.KinematicBody2D
 			{
 				//Here MathF.Lerp is use to make the player accelarate slowly 
 				velocity.x = Mathf.Lerp(velocity.x, facingDirecetion * MoveSpeed, accelaration);
-				//Run Method Call
-				if(Input.IsActionPressed("Run")){
-					CharacterRun(delta);
-				}
 				
-				isWalking = true;
 				if(!IsinAir){
 					_animatedSprite.Play("Walk");
 				}
+				isWalking = true;
+				
 				
 				
 			}
@@ -135,22 +134,22 @@ public class PlayerScript : Godot.KinematicBody2D
 				}
 			
 			}
-
 		}
+			isWalking = false;
 
 	}
 	//TODO Fix the Character Run the problem is not making the animation
 	private void CharacterRun(float delta)
 	{
 		facingRundirecetion = 0;
-		if(IsOnFloor()){	
+		if(!isWalking){	
 			if(!isTakingDamage){	
-				if (Input.IsActionPressed("A"))
+				if (Input.IsActionPressed("Run") && Input.IsActionPressed("A"))
 				{
 					facingRundirecetion -= 1;
 					_animatedSprite.FlipH = true;
 				}
-				if (Input.IsActionPressed("D"))
+				if (Input.IsActionPressed("Run") && Input.IsActionPressed("D"))
 				{
 					facingRundirecetion += 1;
 					_animatedSprite.FlipH = false;
@@ -166,7 +165,6 @@ public class PlayerScript : Godot.KinematicBody2D
 				_animatedSprite.Play("RunRight");
 				}
 				isRunning = true;
-				
 			}
 			else
 			{
@@ -184,6 +182,7 @@ public class PlayerScript : Godot.KinematicBody2D
 
 			}
 		}
+		isRunning = false;
 		
 	}
 	private void CharacterJump(float delta){
